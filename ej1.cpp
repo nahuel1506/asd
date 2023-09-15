@@ -26,6 +26,8 @@ class TablaHash
 private:
 	Lista *arrList;
 	int tamanio;
+
+
     
 public:
 	TablaHash(int cantidadComidas)
@@ -51,16 +53,12 @@ public:
         return this->arrList[pos]->pedidos;
     }
 
-  
-
 	void insertarEnTabla(string unaComida)
 	{
 		int pos = abs(this->fnHash(unaComida)) % this->tamanio;
 		if (arrList[pos]!=NULL)
 		{
             arrList[pos]->pedidos++;
-			
-
 		}else{
             arrList[pos]->comida=unaComida;
             arrList[pos]->pedidos=1;
@@ -198,11 +196,9 @@ public:
 
 int main()
 {
-
-	// Lectura de datos
 	int cantidadComidas = 0;
 	cin >> cantidadComidas;
-    //restricciones
+
 	TablaHash *tabla = new TablaHash(cantidadComidas);
 	string comida;
 
