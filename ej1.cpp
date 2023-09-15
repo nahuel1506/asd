@@ -44,11 +44,11 @@ public:
 		return sum;
 	}
 
-    string comida(int pos){
+    string getComida(int pos){
         return this->arrList[pos]->comida;
     }
 
-    int pedidos(string unaComida){
+    int getPedidos(string unaComida){
         int pos = abs(this->fnHash(unaComida)) % this->tamanio;
         return this->arrList[pos]->pedidos;
     }
@@ -59,9 +59,10 @@ public:
 		if (arrList[pos]!=NULL)
 		{
             arrList[pos]->pedidos++;
+			
+
 		}else{
-            arrList[pos]->comida=unaComida;
-            arrList[pos]->pedidos=1;
+            arrList[pos] = new NodoLista(unaComida,1);
         }
 	}
 };
@@ -212,9 +213,9 @@ int main()
 
 	for (int i = 0; i < cantidadComidas; i++)
 	{ 
-		if (tabla->comida(i) != "")
+		if (tabla->getComida(i) != "")
 		{
-			heap->insertar(tabla->comida(i), tabla->pedidos(tabla->comida(i)));
+			heap->insertar(tabla->getComida(i), tabla->getPedidos(tabla->getComida(i)));
 		}
 	}
 
