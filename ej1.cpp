@@ -102,10 +102,10 @@ private:
 		if (pos > 1)
 		{
 			int posPadre = padre(pos);
-			if (hijoEsMayor(pos, posPadre))//si el hijo es mayor al padre los cambio
+			if (hijoEsMayor(pos, posPadre))
 			{
 				intercambiar(pos, posPadre);
-				flotar(posPadre);//los cambio y veo si el padre sigue siendo mayor
+				flotar(posPadre);
 			}
 		}
 	}
