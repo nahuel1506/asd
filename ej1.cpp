@@ -38,27 +38,20 @@ public:
 	{
 		int sum = 0;
 		for (int k = 0; k < clave.length(); k++)
-			sum = sum + int(clave[k]);
+		{
+			sum = sum * 97 + int(clave[k]);
+		}
 		return sum;
 	}
 
-	string getComida(int pos)
-	{
-		if (arrList[pos] != NULL)
-		{
-			return arrList[pos]->comida;
-		}
-		else
-		{
-			return "";
-		}
-	}
+    string getComida(int pos){
+        return this->arrList[pos]->comida;
+    }
 
-	int getPedidos(string unaComida)
-	{
-		int pos = abs(this->fnHash(unaComida)) % this->tamanio;
-		return this->arrList[pos]->pedidos;
-	}
+    int getPedidos(string unaComida){
+        int pos = abs(this->fnHash(unaComida)) % this->tamanio;
+        return this->arrList[pos]->pedidos;
+    }
 
 	void insertarEnTabla(string unaComida)
 	{
@@ -125,34 +118,23 @@ private:
 		}
 	}
 
-	void hundir(int posPadre)
-	{
-		int posHijoIzq = posIzq(posPadre);
-		int posHijoDer = posDer(posPadre);
-		int posHijoMayor = posHijoIzq;
-		// A la izq del && es para ver si no se va del rango
-		// El primer if se fija quién es el hijo mayor
-		if (posHijoDer < this->primeroLibre && this->elementos[posHijoIzq]->pedidos < this->elementos[posHijoDer]->pedidos)
-		{
-			posHijoMayor = posHijoDer;
-		}
+	void hundir(int pos)
+    {
+        int posHijoIzq = posIzq(pos);
+        int posHijoDer = posDer(pos);
+        int hijoMayor = posHijoIzq; 
 
-		// El segundo if verifica si el hijo es mayor que el padre
-		if (posHijoMayor < this->primeroLibre && hijoEsMayor(posHijoMayor, posPadre))
-		{
-			intercambiar(posPadre, posHijoMayor);
-			hundir(posHijoMayor);
-		}
-		// Si es igual, comparo la comida alfabeticamente
-		if (posHijoMayor < this->primeroLibre && hijoEsIgual(posHijoMayor, posPadre))
-		{
-			if(compareOperation( this->elementos[posHijoIzq]->comida,this->elementos[posHijoIzq]->comida)>1){
-				intercambiar(posPadre, posHijoMayor);
-				hundir(posHijoMayor);
-			}
-				
-		}
-	}
+        if (posHijoDer < this->primeroLibre && this->elementos[posHijoIzq]->pedidos < this->elementos[posHijoDer]->pedidos) 
+        {
+            hijoMayor = posHijoDer; 
+        }
+
+        if (hijoMayor < this->primeroLibre && hijoEsMayor(hijoMayor, pos)) 
+        {
+            intercambiar(pos, hijoMayor);
+            hundir(hijoMayor);
+        }
+    }
 
 	void insertarAux(int pedidos, string comida)
 	{
@@ -226,13 +208,13 @@ int main()
 
 	TablaHash *tabla = new TablaHash(cantidadComidas);
 	string comida;
-	cout << "antes de crear la tabla de hash" << endl;
-	for (int i = 0; i < cantidadComidas; i++)
+
+	for (int i = 0; i < cantidadComidas+1; i++)
 	{
 		cin >> comida;
 		tabla->insertarEnTabla(comida);
 	}
-	cout << "DESPUES de crear la tabla de hash" << endl;
+
 	MaxHeap *heap = new MaxHeap(cantidadComidas);
 
 	for (int i = 0; i < cantidadComidas; i++)
@@ -242,7 +224,7 @@ int main()
 			heap->insertar(tabla->getComida(i), tabla->getPedidos(tabla->getComida(i)));
 		}
 	}
-	cout << "DESPUES de crear HEAP" << endl;
+
 	while (!heap->esVacio())
 	{
 		nodoHeap *tope = heap->obtenerMaximo();

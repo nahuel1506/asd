@@ -1,0 +1,68 @@
+5
+Accion
+Comedia
+Drama
+Terror
+Documental
+50
+13841 Accion
+16727 Comedia
+70043 Drama
+90862 Terror
+2886 Documental
+64077 Accion
+47086 Comedia
+17440 Drama
+36578 Terror
+82524 Documental
+15578 Accion
+40959 Comedia
+52660 Drama
+7351 Terror
+31717 Documental
+11993 Accion
+6240 Comedia
+9870 Drama
+82193 Terror
+78088 Documental
+27211 Accion
+81915 Comedia
+70742 Drama
+68645 Terror
+40380 Documental
+70450 Accion
+38305 Comedia
+3631 Drama
+8861 Terror
+18949 Documental
+22713 Accion
+22701 Comedia
+52027 Drama
+92755 Terror
+29914 Documental
+54913 Accion
+73183 Comedia
+93351 Drama
+72352 Terror
+9760 Documental
+75874 Accion
+4281 Comedia
+67070 Drama
+44885 Terror
+27983 Documental
+98787 Accion
+56878 Comedia
+34222 Drama
+25008 Terror
+39070 Documental
+10
+36578 4
+73183 3
+52660 1
+16727 4
+25008 4
+9870 1
+7351 1
+6240 2
+82524 4
+38305 3
