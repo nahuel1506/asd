@@ -27,8 +27,6 @@ private:
 	Lista *arrList;
 	int tamanio;
 
-
-    
 public:
 	TablaHash(int cantidadComidas)
 	{
@@ -44,26 +42,35 @@ public:
 		return sum;
 	}
 
-    string getComida(int pos){
-        return this->arrList[pos]->comida;
-    }
+	string getComida(int pos)
+	{
+		if (arrList[pos] != NULL)
+		{
+			return arrList[pos]->comida;
+		}
+		else
+		{
+			return "";
+		}
+	}
 
-    int getPedidos(string unaComida){
-        int pos = abs(this->fnHash(unaComida)) % this->tamanio;
-        return this->arrList[pos]->pedidos;
-    }
+	int getPedidos(string unaComida)
+	{
+		int pos = abs(this->fnHash(unaComida)) % this->tamanio;
+		return this->arrList[pos]->pedidos;
+	}
 
 	void insertarEnTabla(string unaComida)
 	{
 		int pos = abs(this->fnHash(unaComida)) % this->tamanio;
-		if (arrList[pos]!=NULL)
+		if (arrList[pos] != NULL)
 		{
-            arrList[pos]->pedidos++;
-			
-
-		}else{
-            arrList[pos] = new NodoLista(unaComida,1);
-        }
+			arrList[pos]->pedidos++;
+		}
+		else
+		{
+			arrList[pos] = new NodoLista(unaComida, 1);
+		}
 	}
 };
 
@@ -86,18 +93,23 @@ private:
 		return pos / 2;
 	}
 
-    int posIzq(int pos)
+	int posIzq(int pos)
 	{
 		return pos * 2;
 	}
 	int posDer(int pos)
 	{
 		return pos * 2 + 1;
-	}  
+	}
 
-	bool hijoEsMayor(int pos, int posPadre)
+	bool hijoEsMayor(int posHijo, int posPadre)
 	{
-		return this->elementos[pos]->pedidos > this->elementos[posPadre]->pedidos;
+		return this->elementos[posHijo]->pedidos > this->elementos[posPadre]->pedidos;
+	}
+
+	bool hijoEsIgual(int posHijo, int posPadre)
+	{
+		return this->elementos[posHijo]->pedidos == this->elementos[posPadre]->pedidos;
 	}
 
 	void flotar(int pos)
@@ -113,23 +125,34 @@ private:
 		}
 	}
 
-	void hundir(int pos)
-    {
-        int posHijoIzq = posIzq(pos);
-        int posHijoDer = posDer(pos);
-        int hijoMayor = posHijoIzq; 
+	void hundir(int posPadre)
+	{
+		int posHijoIzq = posIzq(posPadre);
+		int posHijoDer = posDer(posPadre);
+		int posHijoMayor = posHijoIzq;
+		// A la izq del && es para ver si no se va del rango
+		// El primer if se fija quién es el hijo mayor
+		if (posHijoDer < this->primeroLibre && this->elementos[posHijoIzq]->pedidos < this->elementos[posHijoDer]->pedidos)
+		{
+			posHijoMayor = posHijoDer;
+		}
 
-        if (posHijoDer < this->primeroLibre && this->elementos[posHijoIzq]->pedidos < this->elementos[posHijoDer]->pedidos) 
-        {
-            hijoMayor = posHijoDer; 
-        }
-
-        if (hijoMayor < this->primeroLibre && hijoEsMayor(hijoMayor, pos)) 
-        {
-            intercambiar(pos, hijoMayor);
-            hundir(hijoMayor);
-        }
-    }
+		// El segundo if verifica si el hijo es mayor que el padre
+		if (posHijoMayor < this->primeroLibre && hijoEsMayor(posHijoMayor, posPadre))
+		{
+			intercambiar(posPadre, posHijoMayor);
+			hundir(posHijoMayor);
+		}
+		// Si es igual, comparo la comida alfabeticamente
+		if (posHijoMayor < this->primeroLibre && hijoEsIgual(posHijoMayor, posPadre))
+		{
+			if(compareOperation( this->elementos[posHijoIzq]->comida,this->elementos[posHijoIzq]->comida)>1){
+				intercambiar(posPadre, posHijoMayor);
+				hundir(posHijoMayor);
+			}
+				
+		}
+	}
 
 	void insertarAux(int pedidos, string comida)
 	{
@@ -150,7 +173,7 @@ private:
 		if (!this->esVacio())
 		{
 			ret = this->elementos[1];
-			this->elementos[1] = this->elementos[this->primeroLibre - 1];
+			this->elementos[1] = this->elementos[this->primeroLibre - 1]; // this->primeroLibre - 1 es el último
 			this->primeroLibre--;
 			hundir(1);
 		}
@@ -197,32 +220,33 @@ public:
 
 int main()
 {
+	cout << "PRIMERO" << endl;
 	int cantidadComidas = 0;
 	cin >> cantidadComidas;
 
 	TablaHash *tabla = new TablaHash(cantidadComidas);
 	string comida;
-
-	for (int i = 0; i < cantidadComidas+1; i++)
+	cout << "antes de crear la tabla de hash" << endl;
+	for (int i = 0; i < cantidadComidas; i++)
 	{
 		cin >> comida;
-        tabla->insertarEnTabla(comida);
+		tabla->insertarEnTabla(comida);
 	}
-
+	cout << "DESPUES de crear la tabla de hash" << endl;
 	MaxHeap *heap = new MaxHeap(cantidadComidas);
 
 	for (int i = 0; i < cantidadComidas; i++)
-	{ 
+	{
 		if (tabla->getComida(i) != "")
 		{
 			heap->insertar(tabla->getComida(i), tabla->getPedidos(tabla->getComida(i)));
 		}
 	}
-
+	cout << "DESPUES de crear HEAP" << endl;
 	while (!heap->esVacio())
 	{
 		nodoHeap *tope = heap->obtenerMaximo();
 		cout << tope->comida << endl;
 	}
-		return 0;
+	return 0;
 }
