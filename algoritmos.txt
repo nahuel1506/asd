@@ -1,0 +1,8 @@
+1- MaxHeap + Tabla Hash Abierta
+2- Doble tabla hash con maxheap dentro de una de ellas
+3- MaxHeap
+4- Tabla Hash Cerrada + Orden topologico
+5- Dijkstra
+6- Kruskal
+7-
+8-DAC
