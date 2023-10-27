@@ -85,7 +85,9 @@ int Kruskal(Grafo &grafo)
 {
     int cantV = grafo.getV();
     int cantA = grafo.getA();
+    cout << "antes de crear heap" << endl;
     MinHeap heap = MinHeap(cantA);
+    cout << "despues de crear heap" << endl;
     for (int i = 1; i <= cantV; i++)
     {
         for (Arista *aux = grafo.adyacentesA(i); aux != NULL; aux = aux->sig)
@@ -117,9 +119,10 @@ int Kruskal(Grafo &grafo)
 int main()
 {
     int N, M;
-    cin >> N >> M;
+    cin >> N;
+    cin >> M;
 
-    Grafo grafo(N);
+    Grafo grafo(N,false);
     int a, b, c;
 
     for (int i = 0; i < M; i++)
