@@ -3,7 +3,7 @@
 #include "MFsetv2.cpp"
 #include "MinHeap.cpp"
 
-struct Arista
+/* struct Arista
 {
     int origen;
     int destino;
@@ -11,7 +11,7 @@ struct Arista
     Arista *sig;
     Arista(int unOrigen, int unDestino, int unPeso) : origen(unOrigen), destino(unDestino), peso(unPeso), sig(0){};
     Arista(int unOrigen, int unDestino, int unPeso, Arista *unSig) : origen(unOrigen), destino(unDestino), peso(unPeso), sig(unSig){};
-};
+}; */
 
 struct Vertice
 {
@@ -83,33 +83,35 @@ public:
 
 int Kruskal(Grafo &grafo)
 {
-    int v = grafo.getV();
-    MinHeap heap = MinHeap(v);
-    for (int i = 1; i <= grafo.getV(); i++)
+    int cantV = grafo.getV();
+    int cantA = grafo.getA();
+    MinHeap heap = MinHeap(cantA);
+    for (int i = 1; i <= cantV; i++)
     {
-        for (Arista* aux = grafo.adyacentesA(i); aux!=NULL; aux=aux->sig)
+        for (Arista *aux = grafo.adyacentesA(i); aux != NULL; aux = aux->sig)
         {
-           heap.insertar(aux);
+              cout << aux->origen << " - " << aux->destino << endl;
+            heap.insertar(aux);
+            cout << aux->origen << " - " << aux->destino << endl;
         }
-        
     }
-    int v = grafo.getV();
-    int retorno;
-    int aristaAceptadas = 0;
-    MFSet mfset((grafo.getV() + 1));
+    int retorno = 0;
     int aristasAceptadas = 0;
+    // MFSet mfset(v + 1);
 
-    while (heap.estaVacio() || aristaAceptadas < (v - 1))
+    while ((!heap.estaVacio()) || aristasAceptadas < (cantV - 1))
     {
-        Arista* a = heap.getTope();
+        Arista *a = heap.getTope();
+        cout << a->origen << " - " << a->destino << endl;
         heap.eliminarTope();
-        if (mfset.find(a->origen) != mfset.find(a->destino))
+       /*  if (mfset.find(a->origen) != mfset.find(a->destino))
         {
             mfset.merge(a->origen, a->destino);
             retorno += a->peso;
             aristasAceptadas++;
-        }
+        } */
     }
+    return retorno;
 }
 
 int main()
