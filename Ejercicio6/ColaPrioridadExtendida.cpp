@@ -4,11 +4,14 @@
 #include <iostream>
 using namespace std;
 
-struct nodoHeap
+struct Arista
 {
-    int dato;
-    int prioridad;
-    nodoHeap(int unDato, int unaPrioridad) : dato(unDato), prioridad(unaPrioridad){};
+    int origen;
+    int destino;
+    int peso;
+    Arista *sig;
+    Arista(int unOrigen, int unDestino, int unPeso) : origen(unOrigen), destino(unDestino), peso(unPeso), sig(0){};
+    Arista(int unOrigen, int unDestino, int unPeso, Arista *unSig) : origen(unOrigen), destino(unDestino), peso(unPeso), sig(unSig){};
 };
 
 struct nodoTabla
@@ -24,7 +27,7 @@ class ColaPrioridadExtendida
 {
 private:
     nodoTabla **arrayTabla;
-    nodoHeap **arrayHeap;
+    Arista **arrayHeap;
     int tamanio;
     int primeroLibre;
 
@@ -45,7 +48,7 @@ private:
 
     void intercambiar(int pos1, int pos2)
     {
-        nodoHeap *aux = this->arrayHeap[pos1];
+        Arista *aux = this->arrayHeap[pos1];
         this->arrayHeap[pos1] = this->arrayHeap[pos2];
         this->arrayHeap[pos2] = aux;
 
@@ -59,7 +62,7 @@ private:
         if (pos > 1)
         {
             int posPadre = padre(pos);
-            if (this->arrayHeap[posPadre]->prioridad > this->arrayHeap[pos]->prioridad)
+            if (this->arrayHeap[posPadre]->peso > this->arrayHeap[pos]->peso)
             {
                 intercambiar(posPadre, pos);
                 flotar(posPadre);
@@ -74,8 +77,8 @@ private:
         // si tengo mis dos hijos
         if (posHijoIzq < primeroLibre && posHijoDer < primeroLibre)
         {
-            int posHijoMenor = this->arrayHeap[posHijoIzq]->prioridad <= this->arrayHeap[posHijoDer]->prioridad ? posHijoIzq : posHijoDer;
-            if (this->arrayHeap[pos]->prioridad > this->arrayHeap[posHijoMenor]->prioridad)
+            int posHijoMenor = this->arrayHeap[posHijoIzq]->peso <= this->arrayHeap[posHijoDer]->peso ? posHijoIzq : posHijoDer;
+            if (this->arrayHeap[pos]->peso > this->arrayHeap[posHijoMenor]->peso)
             {
                 intercambiar(pos, posHijoMenor);
                 hundir(posHijoMenor);
@@ -84,7 +87,7 @@ private:
         // si tengo solo hijo izquierdo
         else if (posHijoIzq < primeroLibre)
         {
-            if (this->arrayHeap[pos]->prioridad > this->arrayHeap[posHijoIzq]->prioridad)
+            if (this->arrayHeap[pos]->peso > this->arrayHeap[posHijoIzq]->peso)
             {
                 intercambiar(pos, posHijoIzq);
                 hundir(posHijoIzq);
@@ -92,12 +95,12 @@ private:
         }
     }
 
-    nodoHeap *getTope()
+    Arista *getTope()
     {
         assert(!heapVacio());
         return this->arrayHeap[1];
     }
-      nodoHeap *getUltimo()
+      Arista *getUltimo()
     {
         return this->arrayHeap[primeroLibre - 1];
     }  
@@ -115,7 +118,7 @@ private:
     {
         if (!this->heapLleno())
         {
-            nodoHeap *nuevo = new nodoHeap(dato, prioridad);
+            Arista *nuevo = new Arista(dato, prioridad);
             this->arrayHeap[this->primeroLibre] = nuevo; // lo coloco en el primer lugar libre
             this->insertarEnTabla(dato, primeroLibre); //lo inserto en la tabla hash
             flotar(this->primeroLibre);
@@ -128,8 +131,8 @@ private:
     {
         if (posicion >= 1 && posicion < primeroLibre)
         {
-            int antiguaPrioridad = arrayHeap[posicion]->prioridad;
-            arrayHeap[posicion]->prioridad = nuevaPrioridad;
+            int antiguaPrioridad = arrayHeap[posicion]->peso;
+            arrayHeap[posicion]->peso = nuevaPrioridad;
             if (nuevaPrioridad < antiguaPrioridad)
             {
                 flotar(posicion);
@@ -240,13 +243,13 @@ private:
 public:
     ColaPrioridadExtendida(int tamanio)
     {
-        this->arrayHeap = new nodoHeap *[tamanio + 1];
+        this->arrayHeap = new Arista *[tamanio + 1];
         this->primeroLibre = 1;
         this->tamanio = tamanio;
         arrayTabla = new nodoTabla *[this->tamanio]();
     }
 
-    void encolar(int elemento, int prioridad)
+    void encolar(Arista elemento)
     {
         /*
            1. Se inserta normalmente en el Heap
@@ -256,11 +259,11 @@ public:
        */
 
         // 1. Se inserta normalmente en el Heap
-        this->insertarEnHeap(elemento, prioridad);
+        this->insertarEnHeap(elemento);
         // 2. Se agrega el par (elemento | posición en heap) a la Tabla de Hash
         
     }
-    int desencolar()
+    Arista desencolar()
     {
         /*
             1. Intercambiar la raíz por la última posición del Heap
@@ -275,7 +278,7 @@ public:
         }
 
         // 1. Intercambiar la raíz con el último elemento
-        int raiz = this->getTope()->dato;
+        Arista raiz = this->getTope();
         this->eliminarTope();
 
         return raiz;

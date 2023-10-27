@@ -1,15 +1,7 @@
 #include <iostream>
 #include <string>
 #include "MFsetv2.cpp"
-#include "ColaPrioridadExtendida.cpp"
-
-struct NodoPlato
-{
-    string nombre;
-    int entradas;
-    NodoPlato *sig;
-    NodoPlato(string unNombre) : nombre(unNombre), entradas(0) {}
-};
+#include "MinHeap.cpp"
 
 struct Arista
 {
@@ -87,51 +79,54 @@ public:
     {
         return this->listaAdy[origen]->ady;
     }
-
-    
 };
 
-void Kruskal(Grafo& grafo)
+int Kruskal(Grafo &grafo)
+{
+    int v = grafo.getV();
+    MinHeap heap = MinHeap(v);
+    for (int i = 1; i <= grafo.getV(); i++)
     {
-        int v = grafo.getV();
-        ColaPrioridadExtendida cp = ColaPrioridadExtendida(v);
-        aniadirArista(cp);
-        Lista<Arista> solucion();
-        MFset mfset((grafo.getV() + 1));
-        int aristasAceptadas = 0;
-
-        while (cp.estaVacia() || aristaAceptadas < V - 1)
+        for (Arista* aux = grafo.adyacentesA(i); aux!=NULL; aux=aux->sig)
         {
-            Arista a = cp.pop();
-            if (mfset.find(a.origen) != mfset.find(a.destino))
-            {
-                mfset.merge(a.origen, a.destino);
-                insertarEnLista(solucion, a);
-                aristasAceptadas++;
-            }
+           heap.insertar(aux);
+        }
+        
+    }
+    int v = grafo.getV();
+    int retorno;
+    int aristaAceptadas = 0;
+    MFSet mfset((grafo.getV() + 1));
+    int aristasAceptadas = 0;
+
+    while (heap.estaVacio() || aristaAceptadas < (v - 1))
+    {
+        Arista* a = heap.getTope();
+        heap.eliminarTope();
+        if (mfset.find(a->origen) != mfset.find(a->destino))
+        {
+            mfset.merge(a->origen, a->destino);
+            retorno += a->peso;
+            aristasAceptadas++;
         }
     }
-
-
-
-mfset.merge(0, 2);
+}
 
 int main()
 {
     int N, M;
     cin >> N >> M;
 
-    MFSet grafo(N);
+    Grafo grafo(N);
     int a, b, c;
 
     for (int i = 0; i < M; i++)
     {
         cin >> a >> b >> c;
-        mfset.merge(0, 2);
         grafo.aniadirArista(a, b, c);
     }
 
-    int minima_energia = dijkstra(grafo, origen, destino);
+    int minima_energia = Kruskal(grafo);
     cout << minima_energia << endl;
 
     return 0;
