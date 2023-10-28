@@ -83,6 +83,7 @@ public:
 
 int Kruskal(Grafo &grafo)
 {
+    cout << "hola" << endl;
     int cantV = grafo.getV();
     int cantA = grafo.getA();
     cout << "antes de crear heap" << endl;
@@ -92,26 +93,26 @@ int Kruskal(Grafo &grafo)
     {
         for (Arista *aux = grafo.adyacentesA(i); aux != NULL; aux = aux->sig)
         {
-              cout << aux->origen << " - " << aux->destino << endl;
+            cout << aux->origen << " - " << aux->destino << endl;
             heap.insertar(aux);
             cout << aux->origen << " - " << aux->destino << endl;
         }
     }
     int retorno = 0;
     int aristasAceptadas = 0;
-    // MFSet mfset(v + 1);
+    MFSet mfset(cantV + 1);
 
     while ((!heap.estaVacio()) || aristasAceptadas < (cantV - 1))
     {
-        Arista *a = heap.getTope();
+        Arista *a = new Arista(heap.getTope()->origen, heap.getTope()->destino, heap.getTope()->peso);
         cout << a->origen << " - " << a->destino << endl;
         heap.eliminarTope();
-       /*  if (mfset.find(a->origen) != mfset.find(a->destino))
+        if (mfset.find(a->origen) != mfset.find(a->destino))
         {
             mfset.merge(a->origen, a->destino);
             retorno += a->peso;
             aristasAceptadas++;
-        } */
+        }
     }
     return retorno;
 }
@@ -122,17 +123,21 @@ int main()
     cin >> N;
     cin >> M;
 
-    Grafo grafo(N,false);
-    int a, b, c;
+    Grafo grafo(N, false);
 
+    int a, b, c;
+    cout << M << endl;
     for (int i = 0; i < M; i++)
     {
+
         cin >> a >> b >> c;
+
         grafo.aniadirArista(a, b, c);
+        cout << "puto" << endl;
     }
 
-    int minima_energia = Kruskal(grafo);
-    cout << minima_energia << endl;
+   // int minima_energia = Kruskal(grafo);
+   // cout << minima_energia << endl;
 
     return 0;
 };
