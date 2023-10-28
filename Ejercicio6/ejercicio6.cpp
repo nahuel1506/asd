@@ -36,9 +36,9 @@ public:
     {
         this->cantVertices = cantidadDeVertices;
         this->cantAristas = 0;
-        this->listaAdy = new Vertice *[cantVertices];
+        this->listaAdy = new Vertice *[cantVertices+1];
         // Inicializo la lista en NULL
-        for (int i = 0; i < cantidadDeVertices; i++)
+        for (int i = 1; i <= cantidadDeVertices; i++)
         {
             this->listaAdy[i] = new Vertice(i, 0, NULL);
         }
@@ -83,19 +83,14 @@ public:
 
 int Kruskal(Grafo &grafo)
 {
-    cout << "hola" << endl;
     int cantV = grafo.getV();
     int cantA = grafo.getA();
-    cout << "antes de crear heap" << endl;
     MinHeap heap = MinHeap(cantA);
-    cout << "despues de crear heap" << endl;
     for (int i = 1; i <= cantV; i++)
     {
         for (Arista *aux = grafo.adyacentesA(i); aux != NULL; aux = aux->sig)
         {
-            cout << aux->origen << " - " << aux->destino << endl;
             heap.insertar(aux);
-            cout << aux->origen << " - " << aux->destino << endl;
         }
     }
     int retorno = 0;
@@ -104,8 +99,7 @@ int Kruskal(Grafo &grafo)
 
     while ((!heap.estaVacio()) || aristasAceptadas < (cantV - 1))
     {
-        Arista *a = new Arista(heap.getTope()->origen, heap.getTope()->destino, heap.getTope()->peso);
-        cout << a->origen << " - " << a->destino << endl;
+        Arista *a = heap.getTope();
         heap.eliminarTope();
         if (mfset.find(a->origen) != mfset.find(a->destino))
         {
@@ -126,18 +120,14 @@ int main()
     Grafo grafo(N, false);
 
     int a, b, c;
-    cout << M << endl;
     for (int i = 0; i < M; i++)
     {
-
         cin >> a >> b >> c;
-
-        grafo.aniadirArista(a, b, c);
-        cout << "puto" << endl;
+        grafo.aniadirArista(a, b, c);    
     }
 
-   // int minima_energia = Kruskal(grafo);
-   // cout << minima_energia << endl;
+   int minima_energia = Kruskal(grafo);
+   cout << minima_energia << endl;
 
     return 0;
 };
