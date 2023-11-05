@@ -1,5 +1,6 @@
-#include <string>
 #include <iostream>
+#include <string>
+#include <cstring>
 using namespace std;
 
 struct NodoTablaCerrada

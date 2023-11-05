@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstring>
 #include "MaxHeap.cpp"
 #include "TablaHashCerrada.cpp"
 using namespace std;

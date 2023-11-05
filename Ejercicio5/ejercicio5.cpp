@@ -1,6 +1,6 @@
 #include <iostream>
-#include <vector>
-#include <climits>
+#include <string>
+#include <cstring>
 #include "ColaPrioridadExtendida.cpp"
 
 using namespace std;

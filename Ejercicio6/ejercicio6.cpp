@@ -3,16 +3,6 @@
 #include "MFsetv2.cpp"
 #include "MinHeap.cpp"
 
-/* struct Arista
-{
-    int origen;
-    int destino;
-    int peso;
-    Arista *sig;
-    Arista(int unOrigen, int unDestino, int unPeso) : origen(unOrigen), destino(unDestino), peso(unPeso), sig(0){};
-    Arista(int unOrigen, int unDestino, int unPeso, Arista *unSig) : origen(unOrigen), destino(unDestino), peso(unPeso), sig(unSig){};
-}; */
-
 struct Vertice
 {
     int dato;

@@ -1,6 +1,6 @@
 #include <iostream>
-#include <cassert>
 #include <string>
+#include <cstring>
 #define TABLA_HASH_ABIERTA
 using namespace std;
 

@@ -1,7 +1,6 @@
-#include <cassert>
-#include <climits>
-#include <string>
 #include <iostream>
+#include <string>
+#include <cstring>
 using namespace std;
 
 struct nodoHeap
@@ -94,8 +93,11 @@ private:
 
     nodoHeap *getTope()
     {
-        assert(!heapVacio());
-        return this->arrayHeap[1];
+        if(!heapVacio()){
+        return this->arrayHeap[1];            
+        }
+        return NULL;
+
     }
       nodoHeap *getUltimo()
     {
@@ -104,11 +106,13 @@ private:
 
     void eliminarTope()
     {
-        assert(!heapVacio());
+        if(!heapVacio()){
         eliminarTabla(this->arrayHeap[primeroLibre - 1]->dato);
         this->arrayHeap[1] = this->arrayHeap[primeroLibre - 1]; // pongo el último en la raiz
         this->primeroLibre--;
-        hundir(1); // hundo la nueva raiz
+        hundir(1); // hundo la nueva raiz            
+        }
+
     }
 
     void insertarEnHeap(int dato, int prioridad)
